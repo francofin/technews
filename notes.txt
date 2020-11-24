@@ -1,0 +1,155 @@
+Sequelize (Links to an external site.) is a Promise-based Node.js ORM for Postgres, MySQL, MariaDB, SQLite, and Microsoft SQL Server. 
+It features solid transaction support, relations, eager and lazy loading, and read replication.
+ You’ll use the Sequelize package (Links to an external site.) to add Sequelize to your Node.js applications.
+
+ Dotenv (Links to an external site.) is a zero-dependency Node.js module that loads environment variables from a .env file into process.env, 
+ a Node.js property that returns an object containing the user environment. 
+ This allows developers to store user environment configuration—or the things that are likely to vary between different deployments
+(passwords, secrets, keys, etc.)—separately from their code.
+
+bcrypt (Links to an external site.) is a Node.js library that allows you to hash passwords. 
+Hashing is the process of taking input and using a mathematical formula to chop and mix it up to produce an output of a specific length.
+ Hashing is a one-way function, meaning that it can easily convert input to a fixed-size output, but it is difficult to invert, 
+ or convert in the opposite direction. 
+This attribute allows developers to secure passwords when authenticating users for their applications.
+
+Sequelize is a tool for object-relational mapping (Links to an external site.), or ORM. 
+This means that it sits between the server's API endpoints and the SQL database to translate and normalize data between JavaScript and SQL.
+ We'll write JavaScript to model the database structure, and Sequelize will handle all of the SQL queries.
+
+ When using sever.js update main in package.json to server.js from index.js
+
+ Sequelize prefers to work with the mysql2 library, which appears to be the successor of the native mysql library for Node.js.
+ This is why we installed the mysql2 library with Sequelize.
+Because it doesn't know which dialect of SQL we'll use, we have to install that dialect and then instruct Sequelize that we're using it.
+
+With Sequelize, we no longer have to bother with creating the entire SQL table schema and running it through the SQL shell. 
+All we need to do is create a database; then when we start the app, Sequelize will create the tables for us!
+
+Set up the application to connect to the database using Sequelize. Create a file in the config directory called connection.js.
+ Once that's created, we'll call the Sequelize connection constructor function by adding the following code to connection.js:
+
+ Well, we can do the exact same thing locally! As we'll see later, 
+ the database credentials we'll use for deploying to production won't be the same as the local credentials.
+  So what we can do is set up local environment variables for development, then use the production environment variables when we deploy to Heroku. 
+ This means that our sensitive data will not be exposed when we push to GitHub!
+
+ once we isntall dotenv Once that's installed, at the root of your application create a file called .env and add the following code:
+ DB_NAME='just_tech_news_db'
+DB_USER='your-mysql-username'
+DB_PW='your-mysql-password'
+enter the above
+
+Notice how we don't have to save the require('dotenv') to a variable? All we need it to do here is execute when we use 
+connection.js and all of the data in the .env file will be made available at process.env.<ENVIRONMENT-VARIABLE-NAME>.
+
+Sequelize goes a step further by taking object-oriented JavaScript concepts and applying them to how we set up the SQL tables.
+ This is done by using Sequelize's model class where, essentially,
+ we create our own JavaScript class and define the columns, data types, and any other rules we need the data to adhere to.
+ When using a dotenv file we use process.env.DB...
+
+User.js
+ First, we imported the Model class and DataTypes object from Sequelize. 
+ This Model class is what we create our own models from using the extends keyword so User inherits all of the functionality the Model class has.
+
+ We use the .init() method to initialize the model's data and configuration, passing in two objects as arguments. 
+ The first object will define the columns and data types for those columns. The second object it accepts configures certain options for the table. 
+ Learn more in the Sequelize documents for model configuration (Links to an external site.).
+
+ For the application to work correctly, we'll need to capture user information. We'll need the username, email address, and password. 
+
+Each column's definition gets its own type definition, in which we use the imported Sequelize DataTypes object to define what type of data it will be. 
+We can also apply other options found in SQL, such as allowNull, which is NOT NULL in SQL, and autoIncrement, which is AUTO INCREMENT in MySQL
+
+Sequelize's built-in validators are another great feature. 
+We can use them to ensure any email data follows the pattern of an email address (i.e., <string>@<string>.<string>) 
+so no one can give us incorrect data. There are a lot of prebuilt validators we can use from Sequelize, 
+but you can also make your own, so it's worth reading through the documentation to see what's available to you.
+
+We're using an Express.js 
+router again to help us keep the routes organized. We're even using the four main methods for an API: GET, POST, PUT, and DELETE.
+
+This naming convention along with the use of the HTTP methods follow 
+a famous API architectural pattern called REST, or Representational State Transfer. 
+APIs built following this pattern are what's known as RESTful APIs.
+Use HTTP methods like GET, POST, PUT, and DELETE to describe the action you're performing to interface with that endpoint; for example, 
+GET /api/users means you should expect to receive user data.
+
+Use the proper HTTP status codes like 400, 404, and 500 to indicate errors in a request.
+
+Sequelize Model class. .findAll() is one of the Model class's methods. 
+The .findAll() method lets us query all of the users from the user table in the database,
+ and is the JavaScript equivalent of the following SQL query:
+
+ To insert data, we can use Sequelize's .create() method. 
+ Pass in key/value pairs where the keys are what we defined in the User model and the values are what we get from req.body.
+  In SQL, this command would look like the following code:
+
+This .update() method combines the parameters for creating data and looking up data. 
+We pass in req.body to provide the new data we want to use in the update and req.params.id to indicate 
+where exactly we want that new data to be used.
+
+To delete data, use the .destroy() 
+method and provide some type of identifier to indicate where exactly we would like to delete data from the user database table.
+
+Start by creating an index.js file in the routes/api subdirectory.
+ This file, like index.js in the models folder, will serve as a means to collect all of the API routes and package them up for us.
+
+ Remember how in user-routes.js we didn't use the word users in any routes?
+ That's because in this file we take those routes and implement them to another router instance,
+ prefixing them with the path /users at that time.
+
+Also, note we're importing the connection to Sequelize from config/connection.js. 
+Then, at the bottom of the file, we use the sequelize.sync() method to establish the connection to the database. 
+The "sync" part means that this is Sequelize taking the models and connecting them to associated database tables.
+ If it doesn't find a table, it'll create it for you!
+
+The other thing to notice is the use of {force: false} in the .sync() method. 
+This doesn't have to be included, but if it were set to true, it would drop and re-create all of the database tables on startup
+
+When you performed the GET requests, you might have noticed that the passwords for each user is returning as well. 
+That's probably not the best idea, as there's no logical reason the client needs to receive a user's password. 
+Let's update the GET routes to not return password data.
+
+Notice how we now pass an object into the method like we do with the .findOne() method. 
+This time, we've provided an attributes key and instructed the query to exclude the password column. 
+It's in an array because if we want to exclude more than one, we can just add more.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // search for known ids
+Project.findByPk(123).then(project => {
+  // project will be an instance of Project and stores the content of the table entry
+  // with id 123. if such an entry is not defined you will get null
+})
+
+// search for attributes
+Project.findOne({ where: {title: 'aProject'} }).then(project => {
+  // project will be the first entry of the Projects table with the title 'aProject' || null
+})
+
+
+Project.findOne({
+  where: {title: 'aProject'},
+  attributes: ['id', ['name', 'title']]
+}).then(project => {
+  // project will be the first entry of the Projects table with the title 'aProject' || null
+  // project.get('title') will contain the name of the project
