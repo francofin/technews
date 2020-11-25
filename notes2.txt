@@ -53,3 +53,44 @@ Using the references property, we establish the relationship between this post a
 specifically to the id column that is defined by the key property, which is the primary key. 
 The user_id is conversely defined as the foreign key and will be the matching link.
 
+We will define this relationship in the index.js file in the models folder. (one to many in the index for the models before exporting)
+In the previous section, we imported the Post model into models/index.js as a const and exported it along with User.
+
+// create associations
+User.hasMany(Post, {
+  foreignKey: 'user_id'
+});
+
+We also need to make the reverse association by adding the following statement to the index.js file:
+
+Post.belongsTo(User, {
+  foreignKey: 'user_id',
+});
+
+Yes, we do. These association changes will not take affect in the User table, 
+because there isn't a way to make changes to the table dynamically. We will need to drop 
+the table and create a new one in order for the associations to take affect. But 
+Sequelize does have a way to dynamically drop the table and create a new one to overwrite existing tables and establish the new associations.
+
+In the sync method, there is a configuration parameter { force: false }. (server.js)
+ If we change the value of the force property to true, then the database connection must sync with the model definitions and associations. 
+By forcing the sync method to true, we will make the tables re-create if there are any association changes.
+
+In the next step, we'll include the JOIN to the User table. We do this by adding the property include, as shown in the following code:
+
+Notice that the include property is expressed as an array of objects. To define this object, we need a reference to the model and attributes. 
+
+In order to show the latest news first, we need to use the order property. 
+Which column do you think we should order? To ensure that the latest news articles are shown first to the client, 
+we can use the created_at column, which will display the most recently added posts first.
+
+Post.findAll({
+  attributes: ['id', 'post_url', 'title', 'created_at'],
+  order: [['created_at', 'DESC']], 
+  include: [
+    {
+      model: User,
+      attributes: ['username']
+    }
+  ]
+})
