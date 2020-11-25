@@ -42,3 +42,10 @@ the plaintext password from the user and the hashed password from the database.
 Then the function compares them. If they match, true is returned. If they don't, false is returned.
 
 Using the keyword this, we can access this user's properties, including the password, which was stored as a hashed string.
+
+As the issue shows, we'll create the Post data model to enable users to create and manipulate posts or new articles. 
+We'll also create the RESTful Express APIs to allow CRUD operations to be performed on the MySQL database similar to 
+how we created the User routes in the previous lesson.
+
+You’ll always need to define a model before you can create associations between that model and other models you’ve already created.
+
