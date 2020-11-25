@@ -1,0 +1,21 @@
+We'll use a node package called bcrypt to perform the hashing function. 
+We could've chosen other alternatives, but bcrypt has a proven, consistent track record of security. 
+Its popularity and adoption by different computer languages further underscores its value.
+
+Thankfully, we can use special Sequelize functions called hooks in the model. 
+Also known as lifecycle events, hooks are functions that are called before or after calls in Sequelize.
+
+The nested level of the object inserted is very important. Notice that the hooks property was added to the second object in User.init().
+
+We use the beforeCreate() hook to execute the bcrypt hash function on the plaintext password. In the bcrypt hash function, 
+we pass in the userData object that contains the plaintext password in the password property. We also pass in a saltRound value of 10.
+The resulting hashed password is then passed to the Promise object as a newUserData object with a hashed password property. 
+The return statement then exits out of the function, returning the hashed password in the newUserData function.
+
+
+Good thing there is another method to handle async functions that will make the code more concise and legible.
+ We will use the async/await syntax to replace the Promise.
+
+ The async keyword is used as a prefix to the function that contains the asynchronous function. 
+ await can be used to prefix the async function, which will then gracefully assign the value from the response to the newUserData's password property.
+  The newUserData is then returned to the application with the hashed password.

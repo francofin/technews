@@ -118,23 +118,6 @@ It's in an array because if we want to exclude more than one, we can just add mo
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  // search for known ids
 Project.findByPk(123).then(project => {
   // project will be an instance of Project and stores the content of the table entry
