@@ -5,7 +5,16 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 // create our User model
-class User extends Model {}
+class User extends Model {
+  // set up method to run on instance data (per user) to check password
+  checkPassword(loginPw) {
+    // return bcrypt.compareSync(loginPw, this.password);
+    return bcrypt.compare(loginPw, this.password).then(function(result) {
+        return result;
+    });
+  }
+
+}
 
 // define table columns and configuration
 User.init(

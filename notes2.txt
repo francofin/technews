@@ -19,3 +19,26 @@ Good thing there is another method to handle async functions that will make the 
  The async keyword is used as a prefix to the function that contains the asynchronous function. 
  await can be used to prefix the async function, which will then gracefully assign the value from the response to the newUserData's password property.
   The newUserData is then returned to the application with the hashed password.
+
+  To log in to a user's account, we'll verify the user's identity using the user's email address and password. 
+  We could've used the username, but email is a unique identifier and preferred in case there are duplicate usernames.
+
+
+In this case, a login route could've used the GET method since it doesn't actually create or insert anything into the database.
+ But there is a reason why a POST is the standard for the login that's in process.
+
+A GET method carries the request parameter appended in the URL string, whereas a POST method carries the request parameter in req.body,
+ which makes it a more secure way of transferring data from the client to the server.
+ Remember, the password is still in plaintext, which makes this transmission process a vulnerable link in the chain.
+
+ if the user's email is in the database, 
+ this instance of a user must be returned in a Promise so we can proceed with the password verification process.
+
+ We'll want to use bcrypt again to compare a plaintext password to its encrypted form.
+
+The documentation has a Check a Password section. 
+The bcrypt package offers an async method called compare that takes in two parameters: 
+the plaintext password from the user and the hashed password from the database. 
+Then the function compares them. If they match, true is returned. If they don't, false is returned.
+
+Using the keyword this, we can access this user's properties, including the password, which was stored as a hashed string.
