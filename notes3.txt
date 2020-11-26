@@ -1,0 +1,18 @@
+ So we need to create a third table, for the sole purpose of connecting the data between two other tables with their primary keys.
+  This is known as a through table
+
+Notice the syntax. We instruct the application that the User and Post models will be connected, but in this case through the Vote model.
+ We state what we want the foreign key to be in Vote, which aligns with the fields we set up in the model. 
+ also stipulate that the name of the Vote model should be displayed as voted_posts when queried on, making it a little more informative.
+
+If we want to see the total number of votes on a post, we need to directly connect the Post and Vote models.
+
+When we vote on a post, we're technically updating that post's data. This means that we should create a PUT route for updating a post.
+
+But Sequelize also offers something called model methods. 
+Let's say we've written a complicated query with Sequelize that involved the combination of a few other Sequelize methods. 
+Sequelize model methods allow us to give that complicated set of functionality its own name.
+
+Here, we're using JavaScript's built-in static keyword to indicate that the upvote method is one that's 
+based on the Post model and not an instance method like we used earlier with the User model. 
+This exemplifies Sequelize's heavy usage of object-oriented principles and concepts.
