@@ -26,7 +26,7 @@ class Post extends Model {
       });
     }
   }
-
+// write validator so the column with the froeign key in the post can be validated with the user. 
 
 Post.init(
     {
