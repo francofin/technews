@@ -1,0 +1,60 @@
+ Template engines allow you to write HTML code in a more familiar environment, 
+ leaving placeholders like {{ some_data }} for the data you want to be merged in. 
+ For Just Tech News, we'll use the Handlebars.js template engine.
+
+server.js
+const exphbs = require('express-handlebars');
+const hbs = exphbs.create({});
+
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+
+npm install express-handlebars
+Next, you'll need to set up where the template files live. 
+In the project root directory, create a folder called views. In this new views folder, create another folder called layouts.
+
+In views/layouts, create a file called main.handlebars and add the following code to it:
+
+Your file/folder structure MUST be set up this way for Handlebars.js to work correctly. 
+You will always have a main layout located at (and named) views/layouts/main.handlebars. 
+All other template files will go directly in the views folder (views/welcome.handlebars).
+
+MVC is a popular software-design pattern that organizes your app into the three following separate concerns:
+
+Models: the core data of your app
+
+Views: the UI components, such as your HTML layouts
+
+Controllers: the link between your models and views
+
+In the controllers folder, create a new file called home-routes.js. 
+This file will contain all of the user-facing routes, such as the homepage and login page.
+
+Previously, we used res.send() or res.sendFile() for the response.
+ Because we've hooked up a template engine, we can now use res.render() and specify which template we want to use.
+
+The express.static() method is a built-in Express.js middleware function that can take all of the contents
+ of a folder and serve them as static assets.
+ This is useful for front-end specific files like images, style sheets, and JavaScript files.
+
+ In this case, we want to render the homepage.handlebars template (the .handlebars extension is implied).
+  This template was light on content; it only included a single <div>.
+  Handlebars.js will automatically feed that into the main.handlebars template, however, and respond with a complete HTML file.
+
+ The res.render() method can accept a second argument, an object, which includes all of the data you want to pass to your template.
+  In home-routes.js, update the homepage route to look like the following code:
+
+  The main.handlebars file used three curly brackets as {{{ body }}}, but here we're only using two brackets as {{ title }}. 
+  Why is that? The difference is that two brackets will convert HTML characters to strings. For instance, < would become &lt;.
+   Three brackets, on the other hand, will render the data as HTML.
+
+For more information, review the Handlebars.js docs on HTML escaping (Links to an external site.).
+
+The data that Sequelize returns is actually a Sequelize object with a lot more information attached to it than you might have been expecting.
+ To serialize the object down to only the properties you need, you can use Sequelize's get() method.
+
+ Handlebars.js has built-in helpers that will allow you to perform minimal logic like looping over an array.
+
+ Note the use of {{#each}} to begin the loop and {{/each}} to define where it ends. Any HTML code in between 
+ (e.g., the <li> element) will be repeated for every item in posts. Refresh the page, and you might be surprised to see that it already works.
+  If you have several posts in your database, your homepage will look similar to the following image:
