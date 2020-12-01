@@ -1,0 +1,36 @@
+Async/await acts as "syntactic sugar" for our code, much like ES6 classes, and help make our Promises more readable. 
+To help asynchronous code use async/await, we first add the keyword async to the function that wraps our asynchronous code.
+
+To use await, we'll just add the await keyword before the Promise, as you can see in the following code:
+When using await, we can assign the result of the promise to a variable. For example, const response = await fetch();. 
+This way, we don't need to use catch() or then() to tell the code what to do after the Promise completes.
+
+Now we can add error handling by using the .ok property on the response object.
+
+ But how do you know someone is logged in as they route to different pages in your app?
+  This is where sessions come in handy! Sessions allow our Express.js server to keep track of which user is making a request, 
+ and store useful data about them in memory.
+
+ We need to somehow store information about the session on the user's client. 
+ We can do so by using HTTP cookies, commonly referred to as simply cookies.
+
+ This why we do not store sensitive information like passwords in cookies.
+
+ We'll store the user's cookies in the database as well so that we can easily re-create the user's session,
+  even if our server is offline for any reason.
+
+  npm i express-session connect-session-sequelize
+  The express-session library allows us to connect to the back end. 
+  The connect-session-sequelize library automatically stores the sessions created by express-session into our database.
+
+  "Super secret secret" should be replaced by an actual secret and stored in the .env file.
+   All we need to do to tell our session to use cookies is to set cookie to be {}. 
+  If we wanted to set additional options on the cookie, like a maximum age, we would add the options to that object.
+
+  This gives our server easy access to the user's user_id, username, and a Boolean describing whether or not the user is logged in.
+
+  We want to make sure the session is created before we send the response back, so we're wrapping the variables in a callback. 
+  The req.session.save() method will initiate the creation of the session and then run the callback function once complete.
+
+  Now that we've given users the ability to log in, we should probably allow them to log out as well. 
+  This will entail destroying the session variables and resetting the cookie.
