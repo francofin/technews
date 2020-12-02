@@ -1,3 +1,6 @@
+Note in main.handlebars body is our base.html loading to block content endblock
+by creating an instance of handlebars using exprhbs we can change the config
+
 Async/await acts as "syntactic sugar" for our code, much like ES6 classes, and help make our Promises more readable. 
 To help asynchronous code use async/await, we first add the keyword async to the function that wraps our asynchronous code.
 
@@ -34,3 +37,23 @@ Now we can add error handling by using the .ok property on the response object.
 
   Now that we've given users the ability to log in, we should probably allow them to log out as well. 
   This will entail destroying the session variables and resetting the cookie.
+
+  If a user hasn't logged in to the app, we don't want them to see the comment form or upvote button. 
+  We could accomplish this by creating a second template that doesn't include the form; then in the route on the back end,
+   we could check the session and respond with one template or the other.
+
+  router.get('/post/:id', (req, res) => {
+  if (req.session.loggedIn) {
+    res.render('single-post');
+  }
+  else {
+    res.render('single-post-no-form');
+  }
+});
+
+A simpler solution would be to use another Handlebars.js helper: {{#if}}. 
+This helper's syntax resembles the {{#each}} helper and behaves like a JavaScript if statement.
+
+Wait—we made these changes in the main layout, but we're only passing loggedIn to the single-post.handlebars template.
+ Fortunately, variables that are passed to view templates are automatically passed to the main layout. 
+Thus, the single-post page is already good to go. We just need to update the homepage route to do the same.
